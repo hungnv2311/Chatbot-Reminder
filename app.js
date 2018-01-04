@@ -238,15 +238,17 @@ function timtkb(thp) {
   var result = [];
   console.log (thp);
 
-  for (var i=0; i< obj.length; i++) {
+  for (var i in obj) {
       var a = vietnameseDecode(obj[i].THP);
+      console.log(a);
       var b = vietnameseDecode (thp);
       if (a.match(b)){
           result.push(obj[i]);
           console.log(a);
       }
-      return result;
   }
+    return result;
+
 }
 
 
