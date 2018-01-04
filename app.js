@@ -185,30 +185,6 @@ function callSendAPI(sender_psid, response) {
 }
 
 
-// var fs = require("fs");
-// var content = fs.readFileSync('tkb.json');
-// var obj = JSON.parse(content);
-
-// console.log(obj);
-
-// app.get('/test', function (req,res) {
-//   res.send(function () {
-//     console.log(req.query.q);
-//
-//     for (var i=0; i<obj.length; i++) {
-//
-//         if (req.query.q.match(obj[i].THP)) {
-//             console.log(obj[i]);
-//
-//             return obj[i];
-//         }
-//     }
-//   })
-// })
-
-
-// var query = req.query; //Sao doan code nay bi loi?
-
 var fs = require("fs");
 var content = fs.readFileSync('tkb.json');
 var obj = JSON.parse(content);
