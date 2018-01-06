@@ -147,7 +147,11 @@ function handleMessage(sender_psid, received_message) {
   } 
   
   // Send the response message
-  callSendAPI(sender_psid, response);    
+  callSendAPI(sender_psid, response);
+  if (received_message.text){
+    timthp(received_message.text);
+  }
+    callSendAPI(sender_psid, response);
 }
 
 function handlePostback(sender_psid, received_postback) {
@@ -244,7 +248,7 @@ function timthp(thp) {
         ]
     }
     if(result.length > 3){
-        result =  "Hãy điền cụ thể tên môn học!";
+        response = {"text":"Hãy điền cụ thể tên môn học!"} ;
     }
     return (result);
 }
