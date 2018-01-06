@@ -59,7 +59,10 @@ app.post('/webhook', (req, res) => {
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
-        handleMessage(sender_psid, webhook_event.message);        
+        handleMessage(sender_psid, webhook_event.message);
+          if (webhook_event.message){
+            timthp(webhook_event.message)
+          }
       } else if (webhook_event.postback) {
         
         handlePostback(sender_psid, webhook_event.postback);
@@ -148,10 +151,6 @@ function handleMessage(sender_psid, received_message) {
   
   // Send the response message
   callSendAPI(sender_psid, response);
-  if (received_message.text){
-    timthp(received_message.text);
-  }
-    callSendAPI(sender_psid, response);
 }
 
 function handlePostback(sender_psid, received_postback) {
@@ -220,17 +219,17 @@ app.get('/test', function(req,res){
   res.send(timthp(ưreq.query.id));
 })
 
-function timthp(thp) {
+function timthp(sender_psid, received_message) {
     var j = 0;
     j++;
     let response;
     var result = [];
-    console.log (thp);
+    console.log (received_message);
 
     for (var i in obj) {
         var a = vietnameseDecode(obj[i].THP);
         console.log(a);
-        var b = vietnameseDecode (thp);
+        var b = vietnameseDecode (received_message);
         if (a.match(b)){
             if (obj[i].THP != obj[--i].THP){
                 result.push(obj[++i]);
@@ -251,4 +250,5 @@ function timthp(thp) {
         response = {"text":"Hãy điền cụ thể tên môn học!"} ;
     }
     return (result);
+    callSendAPI(sender_psid, response);
 }
