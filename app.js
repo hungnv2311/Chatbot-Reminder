@@ -112,7 +112,7 @@ function handleMessage(sender_psid, received_message) {
     // Create the payload for a basic text message, which
     // will be added to the body of our request to the Send API
     response = {
-      "text": `You sent the message: "${received_message.text}". Now send me an attachment!`
+      "text": `Bạn muốn xem lịch học môn nào?`
     }
   } else if (received_message.attachments) {
     // Get the URL of the message attachment
@@ -130,7 +130,9 @@ function handleMessage(sender_psid, received_message) {
               {
                 "type": "postback",
                 "title": "Yes!",
-                "payload": "yes",
+                "payload": JSON.stringify({
+
+                }),
               },
               {
                 "type": "postback",
@@ -211,24 +213,38 @@ const vietnameseDecode = (str) => {
 }
 
 app.get('/test', function(req,res){
-  res.send(timtkb(req.query.id));
+  res.send(timthp(ưreq.query.id));
 })
 
-function timtkb(thp) {
-  var result = [];
-  console.log (thp);
+function timthp(thp) {
+    var j = 0;
+    j++;
+    let response;
+    var result = [];
+    console.log (thp);
 
-  for (var i in obj) {
-      var a = vietnameseDecode(obj[i].THP);
-      console.log(a);
-      var b = vietnameseDecode (thp);
-      if (a.match(b)){
-          result.push(obj[i]);
-          console.log(a);
-      }
-  }
-    return result;
-
+    for (var i in obj) {
+        var a = vietnameseDecode(obj[i].THP);
+        console.log(a);
+        var b = vietnameseDecode (thp);
+        if (a.match(b)){
+            if (obj[i].THP != obj[--i].THP){
+                result.push(obj[++i]);
+            }
+        }
+    }
+    response = {
+        "text": "Đâu là tên môn học của bạn?",
+        "quick_replies":[
+            {
+                "content_type":"text",
+                "title":result[j].THP,
+                "payload": result[j].THP
+            }
+        ]
+    }
+    if(result.length > 3){
+        result =  "Hãy điền cụ thể tên môn học!";
+    }
+    return (result);
 }
-
-
