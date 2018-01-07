@@ -121,7 +121,7 @@ function handleMessage(sender_psid, received_message) {
 
       }
 
-      else if (userData.response_findclass && !userData.tim_ten_hoc_phan){
+      else if (userData.response_findclass = true && !userData.tim_ten_hoc_phan){
         timthp(received_message.text);
         console.log(userData);
           userData.tim_ten_hoc_phan = true
