@@ -118,11 +118,10 @@ function handleMessage(sender_psid, received_message) {
         console.log(userData.response_findclass);
 
           callSendAPI(sender_psid, response_findclass);
-          userData.push(response_findclass);
-          // userData.response_findclass = true;
+          userData.response_findclass = true;
       }
-      //userData.response_findclass && !userData.tim_ten_hoc_phan
-      else if (userData.match(response_findclass) ){
+
+      else if (userData.response_findclass && !userData.tim_ten_hoc_phan) ){
         timthp(received_message.text);
         console.log(userData);
           userData.tim_ten_hoc_phan = true
