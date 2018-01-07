@@ -74,7 +74,7 @@ app.post('/webhook', (req, res) => {
   }
 
 });
-var data = {}
+
 
 // Accepts GET requests at the /webhook endpoint
 app.get('/webhook', (req, res) => {
@@ -106,7 +106,8 @@ app.get('/webhook', (req, res) => {
 
 
 function handleMessage(sender_psid, received_message) {
-    var userData = openDatabase([sender_psid]) || []
+    var data = {};
+    var userData = data[sender_psid] || []
   let response;
   // Checks if the message contains text
   if (received_message.text) {
