@@ -107,20 +107,18 @@ app.get('/webhook', (req, res) => {
 
 function handleMessage(sender_psid, received_message) {
     var userData = data[sender_psid] || []
-    console.log('ok');
-    console.log(userData);
   let response;
   // Checks if the message contains text
   if (received_message.text) {
-      console.log(received_message.text)
     // Create the payload for a basic text message, which
     // will be added to the body of our request to the Send API
     var response_findclass = {"text": "Tìm lịch học bằng cách nhập tên môn học?"}
     console.log(!userData.response_findclass);
-      //!userData.response_findclass
       if(!userData.response_findclass){
           // userData.response_findclass = true;
           callSendAPI(sender_psid, response_findclass);
+          console.log(userData);
+          console.log(received_message.text);
           console.log(userData.response_findclass);
           console.log(!userData.response_findclass);
 
