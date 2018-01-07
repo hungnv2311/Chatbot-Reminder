@@ -106,7 +106,7 @@ app.get('/webhook', (req, res) => {
 
 
 function handleMessage(sender_psid, received_message) {
-    var userData = data[sender_psid] || {}
+    var userData = data[sender_psid] || []
   let response;
   // Checks if the message contains text
   if (received_message.text) {
@@ -116,7 +116,7 @@ function handleMessage(sender_psid, received_message) {
     var response_findclass = {"text": "Tìm lịch học bằng cách nhập tên môn học?"}
     console.log(!userData.response_findclass);
       //!userData.response_findclass
-      if(userData = {}){
+      if(!userData.response_findclass){
           userData.response_findclass = true;
           callSendAPI(sender_psid, response_findclass);
           console.log(userData.response_findclass);
