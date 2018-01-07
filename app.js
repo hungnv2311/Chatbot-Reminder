@@ -200,7 +200,7 @@ function timthp(received_message) {
     var button = [];
     var j = 0;
     j++;
-    let response_tim_ten_hoc_phan;
+    let tim_ten_hoc_phan;
     console.log(received_message);
 
     for (var i in obj) {
@@ -229,12 +229,12 @@ function timthp(received_message) {
                 }
             )
         }
-        response_tim_ten_hoc_phan = {
+        tim_ten_hoc_phan = {
             "text": "Ý của bạn có phải là: ",
             "quick_replies": button}
     }
-     else {response_tim_ten_hoc_phan =  { "text": "Hãy điền cụ thể tên môn học!"};
-        callSendAPI(sender_psid, response_tim_ten_hoc_phan);
+     else {tim_ten_hoc_phan =  { "text": "Hãy điền cụ thể tên môn học!"};
+        callSendAPI(sender_psid, tim_ten_hoc_phan);
         }}
 
 //Kết quả trẻ về danh sách tên lớp tín chỉ!!!
