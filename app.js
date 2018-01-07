@@ -62,9 +62,8 @@ app.post('/webhook', (req, res) => {
         handleMessage(sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
         
-        handlePostback(sender_psid, webhook_event.postback);
+        PostbackTimLop(sender_psid, webhook_event.postback);
       }
-      
     });
     // Return a '200 OK' response to all events
     res.status(200).send('EVENT_RECEIVED');
@@ -112,68 +111,33 @@ function handleMessage(sender_psid, received_message) {
     // Create the payload for a basic text message, which
     // will be added to the body of our request to the Send API
     response = {
-        "text": "Bạn có muốn tìm lịch học FTU k?"
+        "text": "Tìm lịch học bằng cách nhập tên môn học?"
     }
+    callSendAPI(sender_psid, response);
     if (received_message.text){
       timthp(received_message.text);
     }
   }
   else if (received_message.attachments) {
-    // Get the URL of the message attachment
-    let attachment_url = received_message.attachments[0].payload.url;
-    response = {
-      "attachment": {
-        "type": "template",
-        "payload": {
-          "template_type": "generic",
-          "elements": [{
-            "title": "Is this the right picture?",
-            "subtitle": "Tap a button to answer.",
-            "image_url": attachment_url,
-            "buttons": [
-              {
-                "type": "postback",
-                "title": "Yes!",
-                "payload": JSON.stringify({
-
-                }),
-              },
-              {
-                "type": "postback",
-                "title": "No!",
-                "payload": "no",
-              },
-                {
-                    "type": "postback",
-                    "title": undefined,
-                    "payload": undefined,
-                }
-            ],
-          }]
-        }
-      }
-    }
-  } 
-  
-  // Send the response message
-  callSendAPI(sender_psid, response);
+    response = {"text": "Hãy nhập tên môn học"}
+      callSendAPI(sender_psid, response);   }
 }
 
-function handlePostback(sender_psid, received_postback) {
-  console.log('ok')
-   let response;
-  // Get the payload for the postback
-  let payload = received_postback.payload;
-
-  // Set the response based on the postback payload
-  if (payload === 'yes') {
-    response = { "text": "Thanks!" }
-  } else if (payload === 'no') {
-    response = { "text": "Oops, try sending another image." }
-  }
-  // Send the message to acknowledge the postback
-  callSendAPI(sender_psid, response);
-}
+// function handlePostback(sender_psid, received_postback) {
+//   console.log('ok')
+//    let response;
+//   // Get the payload for the postback
+//   let payload = received_postback.payload;
+//
+//   // Set the response based on the postback payload
+//   if (payload === 'yes') {
+//     response = { "text": "Thanks!" }
+//   } else if (payload === 'no') {
+//     response = { "text": "Oops, try sending another image." }
+//   }
+//   // Send the message to acknowledge the postback
+//   callSendAPI(sender_psid, response);
+// }
 
 function callSendAPI(sender_psid, response) {
   // Construct the message body
@@ -225,12 +189,15 @@ app.get('/test', function(req,res){
     res.send(timthp(req.query.id));
 })
 
+var result = [];
+
 function timthp(received_message) {
-  var thp = [];
+
+    var thp = [];
+    var button = [];
     var j = 0;
     j++;
     let response;
-    var result = [];
     console.log(received_message);
 
     for (var i in obj) {
@@ -244,22 +211,76 @@ function timthp(received_message) {
             }
         }
     }
-    response = {
-        "text": "Đâu là tên môn học của bạn?",
-        "quick_replies": [
-            {
-                "content_type": "text",
-                "title": thp[j],
-                "payload": thp[j]
-            }
-        ]
-    }
-    if (thp.length > 3) {
-        result = "Hãy điền cụ thể tên môn học!";
-    }
-    console.log(result);
-    console.log (thp);
-    console.log(thp[2]);
+    console.log(JSON.stringify(thp[0]));
+    console.log(thp[0]);
+
     return (result);
+
+    if (thp.length<=3) {
+        for (j in thp) {
+            button.push(
+                {
+                    "content_type": "text",
+                    "title": JSON.stringify(thp[j]),
+                    "payload": JSON.stringify(thp[j])
+                }
+            )
+        }
+        response = {
+            "text": "Ý của bạn có phải là: ",
+            "quick_replies": button}
+    }
+        else {
+            response =  { "text": "Hãy điền cụ thể tên môn học!"};
+        callSendAPI(sender_psid, response);
+        }
+}
+
+
+//Kết quả trẻ về danh sách tên lớp tín chỉ!!!
+
+function PostbackTimLop(sender_psid, received_postback) {
+    console.log('ok');
+    var quickreply = [];
+    let response;
+    // Get the payload for the postback
+    let payload = received_postback.payload;
+
+    // Set the response based on the postback payload
+    for (var k in result) {
+        if (payload == result[k].THP) {
+            quickreply.push(
+                {
+                    "content_type":"text",
+                    "title":JSON.stringify(result[i].TLTC),
+                    "payload":JSON.stringify(result[i].TLTC)
+                }
+            )
+        }
+    }
+    response = {"text": "Chọn lớp cụ thể để biết thêm chi tiết!",
+        "quick_replies": JSON.stringify(quickreply) }
+    callSendAPI(sender_psid, response);
+
+    // Kết quả trả về lịch học
+   PostbackLichHoc(sender_psid, received_postback);
+}
+
+function PostbackLichHoc(sender_psid, received_postback) {
+    console.log('ok');
+    var lichhoc = [];
+    let response;
+    // Get the payload for the postback
+    let payload = received_postback.payload;
+
+    // Set the response based on the postback payload
+    for (var m in result) {
+        if (payload == result[m].TLTC) {
+          lichhoc.push(result[m].LICHHOC)
+        }
+    }
+    response = {"text": 'Lịch học: ' + '<br/>' + 'Giai đoạn: ' + JSON.stringify(result[m].GD) + '<br/>' + 'Lịch học: ' + JSON.stringify(lichhoc) }
+
+    // Send the message to acknowledge the postback
     callSendAPI(sender_psid, response);
 }

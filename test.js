@@ -247,6 +247,17 @@ function timthp(thp) {
         result =  "Hãy điền cụ thể tên môn học!";
     }
     return (result);
+    var button = [];
+    for (var k in thp){
+        button.push({
+            "type": "postback",
+            "title": "Yes!",
+            "payload": JSON.stringify({
+
+            }),
+        })
+    }
 }
+
 
 
