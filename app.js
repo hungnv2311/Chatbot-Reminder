@@ -115,13 +115,14 @@ function handleMessage(sender_psid, received_message) {
     // will be added to the body of our request to the Send API
     var response_findclass = {"text": "Tìm lịch học bằng cách nhập tên môn học?"}
       if(!userData.response_findclass){
-          userData.response_findclass = true;
           callSendAPI(sender_psid, response_findclass);
+          userData.response_findclass = true;
           console.log(userData.response_findclass);
+          console.log(!userData.response_findclass);
 
       }
 
-      else if (userData.response_findclass = true && !userData.tim_ten_hoc_phan){
+      else if (userData.response_findclass && !userData.tim_ten_hoc_phan){
         timthp(received_message.text);
         console.log(userData);
           userData.tim_ten_hoc_phan = true
