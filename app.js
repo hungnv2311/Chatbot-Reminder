@@ -115,9 +115,13 @@ function handleMessage(sender_psid, received_message) {
     // Create the payload for a basic text message, which
     // will be added to the body of our request to the Send API
     response = {
-      "text": `Bạn muốn xem lịch học môn nào?`
+        "text": "Bạn có muốn tìm lịch học FTU k?"
     }
-  } else if (received_message.attachments) {
+    if (received_message.text){
+      timthp(received_message.text);
+    }
+  }
+  else if (received_message.attachments) {
     // Get the URL of the message attachment
     let attachment_url = received_message.attachments[0].payload.url;
     response = {
@@ -141,7 +145,12 @@ function handleMessage(sender_psid, received_message) {
                 "type": "postback",
                 "title": "No!",
                 "payload": "no",
-              }
+              },
+                {
+                    "type": "postback",
+                    "title": undefined,
+                    "payload": undefined,
+                }
             ],
           }]
         }
@@ -216,39 +225,44 @@ const vietnameseDecode = (str) => {
 }
 
 app.get('/test', function(req,res){
-  res.send(timthp(ưreq.query.id));
+    res.send(timthp(req.query.id));
 })
 
-function timthp(sender_psid, received_message) {
+function timthp(received_message) {
+  var thp = [];
     var j = 0;
     j++;
     let response;
     var result = [];
-    console.log (received_message);
+    console.log(received_message);
 
     for (var i in obj) {
         var a = vietnameseDecode(obj[i].THP);
-        console.log(a);
-        var b = vietnameseDecode (received_message);
-        if (a.match(b)){
-            if (obj[i].THP != obj[--i].THP){
-                result.push(obj[++i]);
+        // console.log(a);
+        var b = vietnameseDecode(received_message);
+        if (a.match(b)) {
+            result.push(obj[i]);
+            if (obj[i].THP != obj[--i].THP) {
+                thp.push(obj[++i].THP);
             }
         }
     }
     response = {
         "text": "Đâu là tên môn học của bạn?",
-        "quick_replies":[
+        "quick_replies": [
             {
-                "content_type":"text",
-                "title":result[j].THP,
-                "payload": result[j].THP
+                "content_type": "text",
+                "title": thp[j],
+                "payload": thp[j]
             }
         ]
     }
-    if(result.length > 3){
-        response = {"text":"Hãy điền cụ thể tên môn học!"} ;
+    if (thp.length > 3) {
+        result = "Hãy điền cụ thể tên môn học!";
     }
+    console.log(result);
+    console.log (thp);
+    console.log(thp[2]);
     return (result);
     callSendAPI(sender_psid, response);
 }
