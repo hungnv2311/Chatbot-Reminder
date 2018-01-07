@@ -74,6 +74,7 @@ app.post('/webhook', (req, res) => {
   }
 
 });
+var data = {}
 
 // Accepts GET requests at the /webhook endpoint
 app.get('/webhook', (req, res) => {
@@ -103,20 +104,22 @@ app.get('/webhook', (req, res) => {
   }
 });
 
+
 function handleMessage(sender_psid, received_message) {
+    var userData = data[sender_psid] || {}
   let response;
-  
   // Checks if the message contains text
   if (received_message.text) {    
     // Create the payload for a basic text message, which
     // will be added to the body of our request to the Send API
-    response = {
-        "text": "Tìm lịch học bằng cách nhập tên môn học?"
-    }
-    callSendAPI(sender_psid, response);
-    if (received_message.text){
-      timthp(received_message.text);
-    }
+    var response_findclass = {"text": "Tìm lịch học bằng cách nhập tên môn học?"}
+      if(!userData.response_findclass){
+          callSendAPI(sender_psid, response_findclass)
+          userData.response_findclass = true
+      }else if (userData.response_findclass && !userData.tim_ten_hoc_phan ){
+        timthp(received_message.text);
+          userData.tim_ten_hoc_phan = true
+        }
   }
   else if (received_message.attachments) {
     response = {"text": "Hãy nhập tên môn học"}
@@ -197,7 +200,7 @@ function timthp(received_message) {
     var button = [];
     var j = 0;
     j++;
-    let response;
+    let response_tim_ten_hoc_phan;
     console.log(received_message);
 
     for (var i in obj) {
@@ -226,50 +229,84 @@ function timthp(received_message) {
                 }
             )
         }
-        response = {
+        response_tim_ten_hoc_phan = {
             "text": "Ý của bạn có phải là: ",
             "quick_replies": button}
     }
-        else {
-            response =  { "text": "Hãy điền cụ thể tên môn học!"};
-        callSendAPI(sender_psid, response);
-        }
-}
-
+     else {response_tim_ten_hoc_phan =  { "text": "Hãy điền cụ thể tên môn học!"};
+        callSendAPI(sender_psid, response_tim_ten_hoc_phan);
+        }}
 
 //Kết quả trẻ về danh sách tên lớp tín chỉ!!!
 
 function PostbackTimLop(sender_psid, received_postback) {
     console.log('ok');
     var quickreply = [];
-    let response;
+    let response_postback_tim_lop;
     // Get the payload for the postback
     let payload = received_postback.payload;
 
     // Set the response based on the postback payload
-    for (var k in result) {
-        if (payload == result[k].THP) {
-            quickreply.push(
+    if (userData.response_findclass && userData.tim_ten_hoc_phan && !userData.response_postback_tim_lop ) {
+        for (var k in result) {
+            if (payload == result[k].THP) {
+                quickreply.push(
+                    {
+                        "content_type": "text",
+                        "title": JSON.stringify(result[i].TLTC),
+                        "payload": JSON.stringify(result[i].TLTC)
+                    }
+                )
+            }
+        }
+        response_postback_tim_lop = {
+            "text": "Chọn lớp cụ thể để biết thêm chi tiết!",
+            "quick_replies": JSON.stringify(quickreply)
+        }
+        callSendAPI(sender_psid, response_postback_tim_lop);
+        userData.response_postback_tim_lop = true
+    }
+    else if (userData.response_findclass && userData.tim_ten_hoc_phan && userData.response_postback_tim_lop && !userData.response_postback_lich_hoc){
+        PostbackLichHoc (received_postback);
+        userData.response_postback_lich_hoc = true;
+    }
+    else if (userData.response_findclass && userData.tim_ten_hoc_phan && userData.response_postback_tim_lop && userData.response_postback_lich_hoc && !userData.response_tim_lich_hoc_khac){
+        let response_tim_lich_hoc_khac;
+        response_tim_lich_hoc_khac = {
+            "text": "Bạn có muốn tìm lịch học môn khác?",
+            "quick_replies":[
+            {
+                "content_type":"text",
+                "title":"Có",
+                "payload":"có"
+            },
                 {
                     "content_type":"text",
-                    "title":JSON.stringify(result[i].TLTC),
-                    "payload":JSON.stringify(result[i].TLTC)
+                    "title":"Không",
+                    "payload":"không"
                 }
-            )
+        ]
         }
+        callSendAPI(sender_psid, response_tim_lich_hoc_khac);
+        userData.response_tim_lich_hoc_khac = true
     }
-    response = {"text": "Chọn lớp cụ thể để biết thêm chi tiết!",
-        "quick_replies": JSON.stringify(quickreply) }
-    callSendAPI(sender_psid, response);
-
-    // Kết quả trả về lịch học
-   PostbackLichHoc(sender_psid, received_postback);
+    // else if (userData.response_findclass && userData.tim_ten_hoc_phan && userData.response_postback_tim_lop && userData.response_postback_lich_hoc && userData.response_tim_lich_hoc_khac && !userData.response_tim_lai_tu_dau){
+    //     let response_tim_lai_tu_dau;
+    //     // Get the payload for the postback
+    //     let payload = received_postback.payload;
+    //     if (payload === "có"){
+    //
+    //     }
+    //     else  if (payload === "không"){
+    //
+    //     }
+    // }
 }
 
 function PostbackLichHoc(sender_psid, received_postback) {
     console.log('ok');
     var lichhoc = [];
-    let response;
+    let response_postback_lich_hoc;
     // Get the payload for the postback
     let payload = received_postback.payload;
 
@@ -279,8 +316,8 @@ function PostbackLichHoc(sender_psid, received_postback) {
           lichhoc.push(result[m].LICHHOC)
         }
     }
-    response = {"text": 'Lịch học: ' + '<br/>' + 'Giai đoạn: ' + JSON.stringify(result[m].GD) + '<br/>' + 'Lịch học: ' + JSON.stringify(lichhoc) }
+    response_postback_lich_hoc = {"text": 'Lịch học: ' + '<br/>' + 'Giai đoạn: ' + JSON.stringify(result[m].GD) + '<br/>' + 'Lịch học: ' + JSON.stringify(lichhoc) }
 
     // Send the message to acknowledge the postback
-    callSendAPI(sender_psid, response);
+    callSendAPI(sender_psid, response_postback_lich_hoc);
 }
