@@ -119,15 +119,16 @@ function handleMessage(sender_psid, received_message) {
 
           callSendAPI(sender_psid, response_findclass);
           userData.push(response_findclass);
-          userData.response_findclass = true;
-      }else if (userData.response_findclass && !userData.tim_ten_hoc_phan ){
-        timthp(received_message.text);
-          userData.tim_ten_hoc_phan = true
-        }
+          // userData.response_findclass = true;
+      }
   }
-  else if (received_message.attachments) {
-    response = {"text": "Hãy nhập tên môn học"}
-      callSendAPI(sender_psid, response);   }
+  else if (userData.match(response_findclass)){
+      timthp(received_message.text);
+      userData.tim_ten_hoc_phan = true
+  }
+  // else if (received_message.attachments) {
+  //   response = {"text": "Hãy nhập tên môn học"}
+  //     callSendAPI(sender_psid, response);   }
 }
 
 // function handlePostback(sender_psid, received_postback) {
