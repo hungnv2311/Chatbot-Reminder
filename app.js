@@ -107,7 +107,7 @@ app.get('/webhook', (req, res) => {
 
 
 function handleMessage(sender_psid, received_message) {
-    var userData = data[sender_psid] || []
+    var userData = data[{sender_psid}] || []
   let response;
   // Checks if the message contains text
   if (received_message.text) {
@@ -122,7 +122,6 @@ function handleMessage(sender_psid, received_message) {
           console.log(received_message.text);
           console.log(userData.response_findclass);
           console.log(!userData.response_findclass);
-
       }
 
       else if (userData.response_findclass && !userData.tim_ten_hoc_phan){
