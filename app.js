@@ -154,7 +154,7 @@ function handleMessage(sender_psid, received_message) {
 function callSendAPI(sender_psid, response) {
   // Construct the message body
   let request_body = {
-    "sender": {
+    "recipient": {
       "id": sender_psid
     },
     "message": response
@@ -169,6 +169,8 @@ function callSendAPI(sender_psid, response) {
   }, (err, res, body) => {
     if (!err) {
       console.log('message sent!')
+        console.log(!err);
+        console.log(err);
     } else {
       console.error("Unable to send message:" + err);
     }
@@ -226,21 +228,20 @@ function timthp(received_message) {
     console.log(JSON.stringify(thp[0]));
     console.log(thp[0]);
 
-    return (result);
-
     if (thp.length<=3) {
         for (j in thp) {
             button.push(
                 {
                     "content_type": "text",
-                    "title": JSON.stringify(thp[j]),
-                    "payload": JSON.stringify(thp[j])
+                    "title": thp[j],
+                    "payload": thp[j]
                 }
             )
         }
         tim_ten_hoc_phan = {
             "text": "Ý của bạn có phải là: ",
             "quick_replies": button}
+   console.log(tim_ten_hoc_phan);
     }
      else {tim_ten_hoc_phan =  { "text": "Hãy điền cụ thể tên môn học!"};
         callSendAPI(sender_psid, tim_ten_hoc_phan);
@@ -276,7 +277,7 @@ function PostbackTimLop(sender_psid, received_postback) {
         userData.response_postback_tim_lop = true
     }
     else if (userData.response_findclass && userData.tim_ten_hoc_phan && userData.response_postback_tim_lop && !userData.response_postback_lich_hoc){
-        PostbackLichHoc (received_postback);
+        PostbackLichHoc (sender_psid, received_postback);
         userData.response_postback_lich_hoc = true;
     }
     else if (userData.response_findclass && userData.tim_ten_hoc_phan && userData.response_postback_tim_lop && userData.response_postback_lich_hoc && !userData.response_tim_lich_hoc_khac){
