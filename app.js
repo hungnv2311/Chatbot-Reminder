@@ -114,17 +114,10 @@ function handleMessage(sender_psid, received_message) {
     // Create the payload for a basic text message, which
     // will be added to the body of our request to the Send API
     response_findclass = {"text": "Tìm lịch học bằng cách nhập tên môn học?"};
-        console.log(userData);
-      console.log(userData.response_findclass);
-      console.log(!response_findclass);
+
       if(!response_findclass){
           callSendAPI(sender_psid, response_findclass);
           userData.response_findclass = true;
-
-          console.log(userData);
-          console.log(received_message.text);
-          console.log(userData.response_findclass);
-          console.log(!userData.response_findclass);
       }
 //&& !userData.tim_ten_hoc_phan
       else if (response_findclass ){
