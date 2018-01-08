@@ -107,7 +107,7 @@ app.get('/webhook', (req, res) => {
 
 
 function handleMessage(sender_psid, received_message) {
-    var userData = data[{sender_psid}] || []
+    var userData = data[{sender_psid}] || null
   let response_findclass;
   // Checks if the message contains text
   if (received_message.text) {
@@ -115,6 +115,7 @@ function handleMessage(sender_psid, received_message) {
     // will be added to the body of our request to the Send API
     response_findclass = {"text": "Tìm lịch học bằng cách nhập tên môn học?"};
       console.log(userData.response_findclass);
+      console.log(!userData.response_findclass);
       if(userData.response_findclass){
           callSendAPI(sender_psid, response_findclass);
           userData.response_findclass = true;
@@ -243,6 +244,7 @@ function timthp(received_message) {
             "text": "Ý của bạn có phải là: ",
             "quick_replies": button}
    console.log(tim_ten_hoc_phan);
+        callSendAPI(sender_psid, tim_ten_hoc_phan);
     }
      else {tim_ten_hoc_phan =  { "text": "Hãy điền cụ thể tên môn học!"};
         callSendAPI(sender_psid, tim_ten_hoc_phan);
