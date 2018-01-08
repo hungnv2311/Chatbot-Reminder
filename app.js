@@ -215,21 +215,22 @@ function timthp(sender_psid, received_message) {
     var j = 0;
     j++;
     let tim_ten_hoc_phan;
-    console.log(received_message);
+    console.log(obj[1].THP);
 
     for (var i in obj) {
         var a = vietnameseDecode(obj[i].THP);
         // console.log(a);
         var b = vietnameseDecode(received_message);
         if (a.match(b)) {
-            result.push(obj[i]);
-            if (obj[i].THP != obj[--i].THP) {
+                result.push(obj[i]);
+            if (obj[i].THP !== obj[--i].THP) {
                 thp.push(obj[++i].THP);
             }
         }
     }
     console.log(JSON.stringify(thp[0]));
     console.log(thp[0]);
+    console.log(obj[0].THP);
 
     if (thp.length<=3) {
         for (j in thp) {

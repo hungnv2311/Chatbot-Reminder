@@ -215,49 +215,50 @@ const vietnameseDecode = (str) => {
 app.get('/test', function(req,res){
     res.send(timthp(req.query.id));
 })
+var result = []
+function timthp(sender_psid, received_message) {
 
-function timthp(thp) {
+    var thp = [];
+    var button = [];
     var j = 0;
     j++;
-    let response;
-    var result = [];
-    console.log (thp);
+    let tim_ten_hoc_phan;
+    console.log(obj[0].THP);
 
     for (var i in obj) {
-        var a = vietnameseDecode(obj[i].THP);
-        console.log(a);
-        var b = vietnameseDecode (thp);
-        if (a.match(b)){
-            if (obj[i].THP != obj[--i].THP){
-                result.push(obj[++i]);
-                }
+        var a = (obj[i].THP);
+        // console.log(a);
+        var b = (received_message);
+        if (a.match(b)) {
+            result.push(obj[i]);
+        }
+        if (a.match(b) && obj[i].THP !== obj[--i].THP) {
+            thp.push(obj[++i].THP);
         }
     }
-    response = {
-        "text": "Đâu là tên môn học của bạn?",
-        "quick_replies":[
-            {
-                "content_type":"text",
-                "title":result[j].THP,
-                "payload": result[j].THP
-            }
-        ]
-    }
-    if(result.length > 3){
-        result =  "Hãy điền cụ thể tên môn học!";
-    }
-    return (result);
-    var button = [];
-    for (var k in thp){
-        button.push({
-            "type": "postback",
-            "title": "Yes!",
-            "payload": JSON.stringify({
+    console.log(JSON.stringify(thp[0]));
+    console.log(thp[0]);
+    console.log(obj[0].THP);
 
-            }),
-        })
+    if (thp.length<=3) {
+        for (j in thp) {
+            button.push(
+                {
+                    "content_type": "text",
+                    "title": thp[j],
+                    "payload": thp[j]
+                }
+            )
+        }
+        tim_ten_hoc_phan = {
+            "text": "Ý của bạn có phải là: ",
+            "quick_replies": button}
+        console.log(tim_ten_hoc_phan);
+        callSendAPI(sender_psid, tim_ten_hoc_phan);
     }
-}
+    else {tim_ten_hoc_phan =  { "text": "Hãy điền cụ thể tên môn học!"};
+        callSendAPI(sender_psid, tim_ten_hoc_phan);
+    }}
 
-
+//Kết quả trẻ về danh sách tên lớp tín chỉ!!!
 
