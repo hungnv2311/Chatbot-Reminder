@@ -215,25 +215,28 @@ const vietnameseDecode = (str) => {
 app.get('/test', function(req,res){
     res.send(timthp(req.query.id));
 })
-var result = []
-function timthp(sender_psid, received_message) {
+
+var result = [];
+
+function timthp( received_message) {
 
     var thp = [];
     var button = [];
     var j = 0;
     j++;
     let tim_ten_hoc_phan;
-    console.log(obj[0].THP);
+    // console.log(obj[1].THP);
 
     for (var i in obj) {
-        var a = (obj[i].THP);
+        var a = vietnameseDecode(obj[i].THP);
         // console.log(a);
-        var b = (received_message);
+        var b = vietnameseDecode(received_message);
         if (a.match(b)) {
             result.push(obj[i]);
-        }
-        if (a.match(b) && obj[i].THP !== obj[--i].THP) {
-            thp.push(obj[++i].THP);
+            if (obj[i].THP !== obj[--i].THP) {
+                thp.push(obj[++i].THP);
+                console.log(thp);
+            }
         }
     }
     console.log(JSON.stringify(thp[0]));
@@ -254,11 +257,8 @@ function timthp(sender_psid, received_message) {
             "text": "Ý của bạn có phải là: ",
             "quick_replies": button}
         console.log(tim_ten_hoc_phan);
-        callSendAPI(sender_psid, tim_ten_hoc_phan);
+        callSendAPI( tim_ten_hoc_phan);
     }
     else {tim_ten_hoc_phan =  { "text": "Hãy điền cụ thể tên môn học!"};
         callSendAPI(sender_psid, tim_ten_hoc_phan);
     }}
-
-//Kết quả trẻ về danh sách tên lớp tín chỉ!!!
-
