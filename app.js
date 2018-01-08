@@ -128,7 +128,7 @@ function handleMessage(sender_psid, received_message) {
       }
 //&& !userData.tim_ten_hoc_phan
       else if (response_findclass ){
-        timthp(received_message.text);
+        timthp(sender_psid, received_message.text);
         console.log(userData);
           userData.tim_ten_hoc_phan = true
         }
@@ -208,7 +208,7 @@ app.get('/test', function(req,res){
 
 var result = [];
 
-function timthp(received_message) {
+function timthp(sender_psid, received_message) {
 
     var thp = [];
     var button = [];
