@@ -269,8 +269,9 @@ function PostbackTimLop(sender_psid, received_postback) {
         }
         console.log(quickreply);
         console.log(response_postback_tim_lop);
+        console.log(response_findclass);
         callSendAPI(sender_psid, response_postback_tim_lop);
-        userData.response_postback_tim_lop = true
+        userData.response_postback_tim_lop = true;
     }
     else if (response_findclass && response_postback_tim_lop && !response_tim_lich_hoc_khac){
         PostbackLichHoc (sender_psid, received_postback);
