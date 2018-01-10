@@ -312,10 +312,9 @@ function PostbackTimLop(sender_psid, received_postback) {
     //
     //     }
     // }
-}
 
 function PostbackLichHoc(sender_psid, received_postback) {
-    console.log('ok');
+    console.log('ok 2');
     var lichhoc = [];
     let response_postback_lich_hoc;
     // Get the payload for the postback
@@ -327,7 +326,7 @@ function PostbackLichHoc(sender_psid, received_postback) {
           lichhoc.push(result[m].LICHHOC)
         }
     }
-    response_postback_lich_hoc = {"text": 'Lịch học: ' + '<br/>' + 'Giai đoạn: ' + JSON.stringify(result[m].GD) + '<br/>' + 'Lịch học: ' + JSON.stringify(lichhoc) }
+    response_postback_lich_hoc = {"text": "Lịch học: " + '<br/>' + "Giai đoạn: " + JSON.stringify(result[m].GD) + '<br/>' + "Lịch học: " + JSON.stringify(lichhoc) }
 
     // Send the message to acknowledge the postback
     callSendAPI(sender_psid, response_postback_lich_hoc);
