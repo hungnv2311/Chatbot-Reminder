@@ -253,14 +253,14 @@ function PostbackTimLop(sender_psid, received_postback) {
     let payload = received_postback.payload;
 
     // Set the response based on the postback payload
-    if (userData.response_findclass && userData.tim_ten_hoc_phan && !userData.response_postback_tim_lop ) {
-        for (var k in result) {
-            if (payload == result[k].THP) {
+    if (!response_postback_tim_lop ) {
+        for (var n in result) {
+            if (payload == result[n].THP) {
                 quickreply.push(
                     {
                         "content_type": "text",
-                        "title": JSON.stringify(result[i].TLTC),
-                        "payload": JSON.stringify(result[i].TLTC)
+                        "title": JSON.stringify(result[n].TLTC),
+                        "payload": JSON.stringify(result[n].TLTC)
                     }
                 )
             }
@@ -272,11 +272,11 @@ function PostbackTimLop(sender_psid, received_postback) {
         callSendAPI(sender_psid, response_postback_tim_lop);
         userData.response_postback_tim_lop = true
     }
-    else if (userData.response_findclass && userData.tim_ten_hoc_phan && userData.response_postback_tim_lop && !userData.response_postback_lich_hoc){
+    else if (response_postback_tim_lop && !response_tim_lich_hoc_khac){
         PostbackLichHoc (sender_psid, received_postback);
         userData.response_postback_lich_hoc = true;
     }
-    else if (userData.response_findclass && userData.tim_ten_hoc_phan && userData.response_postback_tim_lop && userData.response_postback_lich_hoc && !userData.response_tim_lich_hoc_khac){
+    else if (response_postback_tim_lop && response_tim_lich_hoc_khac){
         let response_tim_lich_hoc_khac;
         response_tim_lich_hoc_khac = {
             "text": "Bạn có muốn tìm lịch học môn khác?",
