@@ -251,52 +251,56 @@ function PostbackTimLop(sender_psid, received_postback) {
     let payload = received_postback.payload;
     console.log(response_postback_tim_lop);
     // Set the response based on the postback payload
-    if (response_findclass && !response_postback_tim_lop ) {
-        for (var n in result) {
-            if (payload == result[n].THP) {
-                quickreply.push(
+    if (received_postback) {
+            for (var n in result) {
+                if (payload == result[n].THP) {
+                    quickreply.push(
+                        {
+                            "content_type": "text",
+                            "title": result[n].TLTC,
+                            "payload": result[n].TLTC
+                        }
+                    )
+                }
+            }
+            response_postback_tim_lop = {
+                "text": "Chọn lớp cụ thể để biết thêm chi tiết!",
+                "quick_replies": quickreply
+            }
+
+        if (!response_postback_tim_lop) {
+            console.log(quickreply);
+            console.log(response_postback_tim_lop);
+            console.log(response_findclass);
+            callSendAPI(sender_psid, response_postback_tim_lop);
+            userData.response_postback_tim_lop = true;
+        }
+        else if (response_postback_tim_lop && !response_tim_lich_hoc_khac) {
+            PostbackLichHoc(sender_psid, received_postback);
+            userData.response_postback_lich_hoc = true;
+        }
+        else if (response_findclass && response_postback_tim_lop && response_tim_lich_hoc_khac) {
+            let response_tim_lich_hoc_khac;
+            response_tim_lich_hoc_khac = {
+                "text": "Bạn có muốn tìm lịch học môn khác?",
+                "quick_replies": [
                     {
                         "content_type": "text",
-                        "title": result[n].TLTC,
-                        "payload": result[n].TLTC
+                        "title": "Có",
+                        "payload": "có"
+                    },
+                    {
+                        "content_type": "text",
+                        "title": "Không",
+                        "payload": "không"
                     }
-                )
+                ]
             }
+            callSendAPI(sender_psid, response_tim_lich_hoc_khac);
+            userData.response_tim_lich_hoc_khac = true
         }
-        response_postback_tim_lop = {
-            "text": "Chọn lớp cụ thể để biết thêm chi tiết!",
-            "quick_replies": quickreply
-        }
-        console.log(quickreply);
-        console.log(response_postback_tim_lop);
-        console.log(response_findclass);
-        callSendAPI(sender_psid, response_postback_tim_lop);
-        userData.response_postback_tim_lop = true;
     }
-    else if (response_findclass && response_postback_tim_lop && !response_tim_lich_hoc_khac){
-        PostbackLichHoc (sender_psid, received_postback);
-        userData.response_postback_lich_hoc = true;
-    }
-    else if (response_findclass && response_postback_tim_lop && response_tim_lich_hoc_khac){
-        let response_tim_lich_hoc_khac;
-        response_tim_lich_hoc_khac = {
-            "text": "Bạn có muốn tìm lịch học môn khác?",
-            "quick_replies":[
-            {
-                "content_type":"text",
-                "title":"Có",
-                "payload":"có"
-            },
-                {
-                    "content_type":"text",
-                    "title":"Không",
-                    "payload":"không"
-                }
-        ]
-        }
-        callSendAPI(sender_psid, response_tim_lich_hoc_khac);
-        userData.response_tim_lich_hoc_khac = true
-    }
+}
     // else if (userData.response_findclass && userData.tim_ten_hoc_phan && userData.response_postback_tim_lop && userData.response_postback_lich_hoc && userData.response_tim_lich_hoc_khac && !userData.response_tim_lai_tu_dau){
     //     let response_tim_lai_tu_dau;
     //     // Get the payload for the postback
