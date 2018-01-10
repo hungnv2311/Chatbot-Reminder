@@ -202,7 +202,7 @@ app.get('/test', function(req,res){
 var result = [];
 
 function timthp(sender_psid, received_message) {
-
+    var thpraw = [];
     var thp = [];
     var button = [];
     var j = 0;
@@ -215,12 +215,13 @@ function timthp(sender_psid, received_message) {
         var b = vietnameseDecode(received_message);
         if (a.match(b)) {
                 result.push(obj[i]);
-            if (obj[i].THP !== obj[--i].THP) {
-                thp.push(obj[++i].THP);
-                console.log(obj[i].THP);
-            }
+                thpraw.push(obj[i].THP);
         }
     }
+    for (var k in thpraw){
+    if (thpraw[k] !== thpraw[++k]){
+        thp.push(thpraw[--k]);
+    }}
 
     if (thp.length<=3) {
         for (j in thp) {
