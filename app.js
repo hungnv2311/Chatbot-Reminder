@@ -259,15 +259,15 @@ function PostbackTimLop(sender_psid, received_postback) {
                 quickreply.push(
                     {
                         "content_type": "text",
-                        "title": JSON.stringify(result[n].TLTC),
-                        "payload": JSON.stringify(result[n].TLTC)
+                        "title": result[n].TLTC,
+                        "payload": result[n].TLTC
                     }
                 )
             }
         }
         response_postback_tim_lop = {
             "text": "Chọn lớp cụ thể để biết thêm chi tiết!",
-            "quick_replies": JSON.stringify(quickreply)
+            "quick_replies": quickreply
         }
         callSendAPI(sender_psid, response_postback_tim_lop);
         userData.response_postback_tim_lop = true
