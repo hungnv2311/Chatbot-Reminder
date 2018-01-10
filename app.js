@@ -251,7 +251,7 @@ function PostbackTimLop(sender_psid, received_postback) {
     let payload = received_postback.payload;
     console.log(response_postback_tim_lop);
     // Set the response based on the postback payload
-    if (received_postback) {
+    if (received_postback.payload) {
             for (var n in result) {
                 if (payload == result[n].THP) {
                     quickreply.push(
