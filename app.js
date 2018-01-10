@@ -122,7 +122,6 @@ function handleMessage(sender_psid, received_message) {
 //&& !userData.tim_ten_hoc_phan
       else if (response_findclass ){
         timthp(sender_psid, received_message.text);
-        console.log(userData);
           userData.tim_ten_hoc_phan = true
         }
   }
@@ -236,7 +235,6 @@ function timthp(sender_psid, received_message) {
         tim_ten_hoc_phan = {
             "text": "Ý của bạn có phải là: ",
             "quick_replies": button}
-   console.log(tim_ten_hoc_phan);
         callSendAPI(sender_psid, tim_ten_hoc_phan);
     }
      else {tim_ten_hoc_phan =  { "text": "Hãy điền cụ thể tên môn học!"};
@@ -251,7 +249,7 @@ function PostbackTimLop(sender_psid, received_postback) {
     let response_postback_tim_lop;
     // Get the payload for the postback
     let payload = received_postback.payload;
-
+    console.log(response_postback_tim_lop);
     // Set the response based on the postback payload
     if (!response_postback_tim_lop ) {
         for (var n in result) {
@@ -269,6 +267,8 @@ function PostbackTimLop(sender_psid, received_postback) {
             "text": "Chọn lớp cụ thể để biết thêm chi tiết!",
             "quick_replies": quickreply
         }
+        console.log(quickreply);
+        console.log(response_postback_tim_lop);
         callSendAPI(sender_psid, response_postback_tim_lop);
         userData.response_postback_tim_lop = true
     }
