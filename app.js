@@ -251,7 +251,7 @@ function PostbackTimLop(sender_psid, received_postback) {
     let payload = received_postback.payload;
     console.log(response_postback_tim_lop);
     // Set the response based on the postback payload
-    if (!response_postback_tim_lop ) {
+    if (response_findclass && !response_postback_tim_lop ) {
         for (var n in result) {
             if (payload == result[n].THP) {
                 quickreply.push(
@@ -272,11 +272,11 @@ function PostbackTimLop(sender_psid, received_postback) {
         callSendAPI(sender_psid, response_postback_tim_lop);
         userData.response_postback_tim_lop = true
     }
-    else if (response_postback_tim_lop && !response_tim_lich_hoc_khac){
+    else if (response_findclass && response_postback_tim_lop && !response_tim_lich_hoc_khac){
         PostbackLichHoc (sender_psid, received_postback);
         userData.response_postback_lich_hoc = true;
     }
-    else if (response_postback_tim_lop && response_tim_lich_hoc_khac){
+    else if (response_findclass && response_postback_tim_lop && response_tim_lich_hoc_khac){
         let response_tim_lich_hoc_khac;
         response_tim_lich_hoc_khac = {
             "text": "Bạn có muốn tìm lịch học môn khác?",
