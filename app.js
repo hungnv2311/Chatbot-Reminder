@@ -253,7 +253,7 @@ function PostbackTimLop(sender_psid, received_postback) {
     // Set the response based on the postback payload
     if (received_postback.payload) {
             for (var n in result) {
-                if (payload == result[n].THP) {
+                if (payload === result[n].THP) {
                     quickreply.push(
                         {
                             "content_type": "text",
